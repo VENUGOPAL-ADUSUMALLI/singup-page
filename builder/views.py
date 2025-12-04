@@ -14,6 +14,10 @@ def signup(request):
 
     if password != confirm_password:
         return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Passwords do not match'})
+    
+    if User.objects.filter(email=email).exists():
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': 'Email already exists'})
+    
     user = User.objects.create(email=email, password=password, name=name, Preferred_language=Preferred_language)
     user.save()
     return Response(status=status.HTTP_201_CREATED, data={'message': 'Account created successfully'})
